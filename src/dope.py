@@ -10,9 +10,9 @@ def normalize(data: numpy.ndarray) -> numpy.ndarray:
     return (data - data.min(axis=0, initial=None)) / data.ptp(axis=0)
 
 
-def points_to_line(point, line):
+def distance_point_to_line(point, line):
     """
-    distance from one or more point(s) to a line defined by two nodes
+    distance from one (or more) point(s) to a line defined by two nodes
 
     point = [x0, y0]  (can also be an m x 2 array of points)
     line = [[x1, y1], [x2, y2]]
@@ -54,7 +54,7 @@ class DoPe(object):
             interval = [0, self.data.shape[0] - 1]
             self.indices = numpy.array(interval)
         # calculate point-line distances
-        distances = points_to_line(
+        distances = distance_point_to_line(
             point=self.data[interval[0]+1:interval[1], :],
             line=self.data[interval][:])
         # evaluate conditions
