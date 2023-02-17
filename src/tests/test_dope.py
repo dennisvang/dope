@@ -23,3 +23,14 @@ class PointToLineTests(TestCase):
             with self.subTest(case=case):
                 self.assertTrue(numpy.all(
                     points_to_line(point=case, line=line) == actual_distance))
+
+
+class DoPeTests(TestCase):
+    def test_simplify(self):
+        epsilon = 0.2
+        data = numpy.array(
+            [[0, 0], [1, -1], [2, 2], [3, 0], [4, 0], [5, -1], [6, 1], [7, 0]])
+        dp = DoPe(data=data, epsilon=epsilon)
+        dp.simplify()
+        print(dp.indices)
+        dp.plot()
