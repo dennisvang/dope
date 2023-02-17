@@ -81,7 +81,16 @@ class _DoPe(object):
                 linestyle=':',
                 marker='o',
             )
-            # todo: plot tolerance line segment for reference
+            if normalized and self.tolerance:
+                # plot reference line for tolerance
+                plt.plot(
+                    [1 - self.tolerance, 1 - self.tolerance, 1, 1],
+                    [0.01, 0, 0, 0.01],
+                    color='k',
+                    linestyle='-',
+                    linewidth=2,
+                )
+                plt.text(0.9, 0.02, 'tolerance', horizontalalignment='center')
             plt.title(
                 f'{"normalized" if normalized else "original"} units, '
                 f'tolerance={self.tolerance}, '
