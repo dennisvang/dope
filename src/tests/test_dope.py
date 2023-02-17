@@ -26,11 +26,27 @@ class PointToLineTests(TestCase):
 
 
 class DoPeTests(TestCase):
-    def test_simplify(self):
-        epsilon = 0.2
+    def test_simplify_epsilon(self):
         data = numpy.array(
             [[0, 0], [1, -1], [2, 2], [3, 0], [4, 0], [5, -1], [6, 1], [7, 0]])
-        dp = DoPe(data=data, epsilon=epsilon)
-        dp.simplify()
-        print(dp.indices)
-        dp.plot()
+        cases = [(0.0, 8), (0.1, 8), (0.2, 6), (0.3, 5), (0.4, 4), (0.5, 3),
+                 (0.6, 3), (0.7, 2), (1.0, 2)]
+        for epsilon, expected_length in cases:
+            with self.subTest(epsilon=epsilon):
+                dp = DoPe(data=data, epsilon=epsilon, max_depth=None)
+                dp.simplify()
+                dp.plot()
+                self.assertEqual(expected_length, dp.indices.size)
+
+    def test_simplify_max_depth(self):
+        data = numpy.array(
+            [[0, 0], [1, -1], [2, 2], [3, 0], [4, 0], [5, -1], [6, 1], [7, 0]])
+        cases = [0, 1, 2, 3, 4]  # the None case is covered in the epsilon test
+        for max_depth in cases:
+            # max. number of nodes in the tree at given depth (plus two edges)
+            expected_max_length = sum(2**i for i in range(max_depth)) + 2
+            with self.subTest(max_depth=max_depth):
+                dp = DoPe(data=data, epsilon=0, max_depth=max_depth)
+                dp.simplify()
+                dp.plot()
+                self.assertLessEqual(dp.indices.size, expected_max_length)

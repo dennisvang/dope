@@ -1,5 +1,8 @@
+import sys
 from matplotlib import pyplot as plt
 import numpy
+
+RECURSION_LIMIT = sys.getrecursionlimit()
 
 
 def normalize(data: numpy.ndarray) -> numpy.ndarray:
@@ -30,41 +33,54 @@ def points_to_line(point, line):
 
 
 class DoPe(object):
-    def __init__(self, data: numpy.ndarray, epsilon: float):
-        self.epsilon = epsilon
+    def __init__(self, data: numpy.ndarray, epsilon: float,
+                 max_depth: int = None):
         self.data = normalize(data)
+        self.epsilon = epsilon
+        if max_depth is None or max_depth >= RECURSION_LIMIT:
+            max_depth = RECURSION_LIMIT
+        self.max_depth = max_depth
         self.indices = None
 
-    def simplify(self, interval=None):
-        """ recursive implementation of Douglas-Peucker line simplification """
+    def simplify(self, interval=None, depth=0):
+        """ recursive (depth-first) Douglas-Peucker line simplification """
         # init
         if interval is None:
             interval = [0, self.data.shape[0] - 1]
             self.indices = numpy.array(interval)
         # calculate point-line distances
         distances = points_to_line(
-            # include the first point, for convenient indexing
-            point=self.data[interval[0]:interval[1], :],
+            point=self.data[interval[0]+1:interval[1], :],
             line=self.data[interval][:])
-        # check if largest distance meets requirement
-        max_index_local = numpy.argmax(distances) if distances.size else None
-        if not max_index_local or distances[max_index_local] < self.epsilon:
+        # evaluate conditions
+        bottom_reached = not distances.size
+        max_depth_reached = depth == self.max_depth
+        local_max_index = numpy.argmax(distances) if distances.size else None
+        epsilon_reached = distances[local_max_index] < self.epsilon
+        # return or split
+        if bottom_reached or max_depth_reached or epsilon_reached:
             # base case
             return
         else:
             # recursion case
-            max_index_global = max_index_local + interval[0]
+            global_max_index = local_max_index + interval[0] + 1
             insert_index = numpy.nonzero(self.indices == interval[1])[0]
+            # store the split node
             self.indices = numpy.insert(
-                self.indices, insert_index, max_index_global)
-            self.simplify(interval=[interval[0], max_index_global])
-            self.simplify(interval=[max_index_global, interval[1]])
+                self.indices, insert_index, global_max_index)
+            # split and evaluate recursively
+            depth += 1
+            self.simplify(interval=[interval[0], global_max_index], depth=depth)
+            self.simplify(interval=[global_max_index, interval[1]], depth=depth)
 
     def plot(self):
         plt.plot(self.data[:, 0], self.data[:, 1], color='0.7')
         plt.plot(self.data[self.indices, 0], self.data[self.indices, 1],
                  color='r', linestyle=':', marker='o')
-        plt.title(f'normalized data, epsilon={self.epsilon}')
+        plt.title(
+            f'normalized data, epsilon={self.epsilon}, '
+            f'max_depth={self.max_depth}, '
+            f'reduction: {self.data.shape[0]} to {self.indices.size}')
         plt.grid()
         plt.axis('equal')
         plt.show()
