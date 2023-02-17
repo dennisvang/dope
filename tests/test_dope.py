@@ -28,9 +28,19 @@ class DistancePointToLineTests(TestCase):
 class DoPeTests(TestCase):
     def test_simplify_epsilon(self):
         data = numpy.array(
-            [[0, 0], [1, -1], [2, 2], [3, 0], [4, 0], [5, -1], [6, 1], [7, 0]])
-        cases = [(0.0, 8), (0.1, 8), (0.2, 6), (0.3, 5), (0.4, 4), (0.5, 3),
-                 (0.6, 3), (0.7, 2), (1.0, 2)]
+            [[0, 0], [1, -1], [2, 2], [3, 0], [4, 0], [5, -1], [6, 1], [7, 0]]
+        )
+        cases = [
+            (0.0, 8),
+            (0.1, 8),
+            (0.2, 6),
+            (0.3, 5),
+            (0.4, 4),
+            (0.5, 3),
+            (0.6, 3),
+            (0.7, 2),
+            (1.0, 2),
+        ]
         for epsilon, expected_length in cases:
             with self.subTest(epsilon=epsilon):
                 dp = DoPe(data=data, epsilon=epsilon, max_depth=None)
@@ -40,7 +50,8 @@ class DoPeTests(TestCase):
 
     def test_simplify_max_depth(self):
         data = numpy.array(
-            [[0, 0], [1, -1], [2, 2], [3, 0], [4, 0], [5, -1], [6, 1], [7, 0]])
+            [[0, 0], [1, -1], [2, 2], [3, 0], [4, 0], [5, -1], [6, 1], [7, 0]]
+        )
         cases = [0, 1, 2, 3, 4]  # the None case is covered in the epsilon test
         for max_depth in cases:
             with self.subTest(max_depth=max_depth):

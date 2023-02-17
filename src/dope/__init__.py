@@ -15,7 +15,7 @@ RECURSION_LIMIT = sys.getrecursionlimit()
 
 
 def normalize(data: numpy.ndarray) -> numpy.ndarray:
-    """ transform data columns so their values are between zero and one """
+    """transform data columns so their values are between zero and one"""
     return (data - data.min(axis=0, initial=None)) / data.ptp(axis=0)
 
 
@@ -36,13 +36,17 @@ def distance_point_to_line(point, line):
         point.resize((1, 2))
     s = numpy.diff(line, n=1, axis=0)
     numerator = numpy.abs(
-        s[0, 0] * (line[0, 1]-point[:, 1]) - (line[0, 0]-point[:, 0]) * s[0, 1])
+        s[0, 0] * (line[0, 1] - point[:, 1])
+        - (line[0, 0] - point[:, 0]) * s[0, 1]
+    )
     denominator = numpy.sqrt(numpy.dot(s[0], s[0]))
     return numerator / denominator
 
 
 class DoPe(object):
-    def __init__(self, data: numpy.ndarray, epsilon: float, max_depth: int = None):
+    def __init__(
+        self, data: numpy.ndarray, epsilon: float, max_depth: int = None
+    ):
         self.data = normalize(data)
         self.epsilon = epsilon
         if max_depth is None or max_depth >= RECURSION_LIMIT:
@@ -52,19 +56,20 @@ class DoPe(object):
 
     @property
     def max_length(self):
-        """ max. number of nodes in the tree at given depth (plus two edges) """
+        """max. number of nodes in the tree at given depth (plus two edges)"""
         return sum(2**i for i in range(self.max_depth)) + 2
 
     def simplify(self, interval=None, depth=0):
-        """ recursive (depth-first) Douglas-Peucker line simplification """
+        """recursive (depth-first) Douglas-Peucker line simplification"""
         # init
         if interval is None:
             interval = [0, self.data.shape[0] - 1]
             self.indices = numpy.array(interval)
         # calculate point-line distances
         distances = distance_point_to_line(
-            point=self.data[interval[0]+1:interval[1], :],
-            line=self.data[interval][:])
+            point=self.data[interval[0] + 1 : interval[1], :],
+            line=self.data[interval][:],
+        )
         # evaluate conditions
         bottom_reached = not distances.size
         max_depth_reached = depth == self.max_depth
@@ -80,11 +85,16 @@ class DoPe(object):
             insert_index = numpy.nonzero(self.indices == interval[1])[0]
             # store the split node
             self.indices = numpy.insert(
-                self.indices, insert_index, global_max_index)
+                self.indices, insert_index, global_max_index
+            )
             # split and evaluate recursively
             depth += 1
-            self.simplify(interval=[interval[0], global_max_index], depth=depth)
-            self.simplify(interval=[global_max_index, interval[1]], depth=depth)
+            self.simplify(
+                interval=[interval[0], global_max_index], depth=depth
+            )
+            self.simplify(
+                interval=[global_max_index, interval[1]], depth=depth
+            )
 
     def plot(self):
         if plt:
