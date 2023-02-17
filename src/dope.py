@@ -1,5 +1,9 @@
 import sys
-from matplotlib import pyplot as plt
+
+try:
+    from matplotlib import pyplot as plt
+except ImportError:
+    plt = None
 import numpy
 
 RECURSION_LIMIT = sys.getrecursionlimit()
@@ -33,8 +37,7 @@ def distance_point_to_line(point, line):
 
 
 class DoPe(object):
-    def __init__(self, data: numpy.ndarray, epsilon: float,
-                 max_depth: int = None):
+    def __init__(self, data: numpy.ndarray, epsilon: float, max_depth: int = None):
         self.data = normalize(data)
         self.epsilon = epsilon
         if max_depth is None or max_depth >= RECURSION_LIMIT:
@@ -79,13 +82,22 @@ class DoPe(object):
             self.simplify(interval=[global_max_index, interval[1]], depth=depth)
 
     def plot(self):
-        plt.plot(self.data[:, 0], self.data[:, 1], color='0.7')
-        plt.plot(self.data[self.indices, 0], self.data[self.indices, 1],
-                 color='r', linestyle=':', marker='o')
-        plt.title(
-            f'normalized data, epsilon={self.epsilon}, '
-            f'max_depth={self.max_depth}, '
-            f'reduction: {self.data.shape[0]} to {self.indices.size}')
-        plt.grid()
-        plt.axis('equal')
-        plt.show()
+        try:
+            plt.plot(self.data[:, 0], self.data[:, 1], color='0.7')
+            plt.plot(
+                self.data[self.indices, 0],
+                self.data[self.indices, 1],
+                color='r',
+                linestyle=':',
+                marker='o',
+            )
+            plt.title(
+                f'normalized data, epsilon={self.epsilon}, '
+                f'max_depth={self.max_depth}, '
+                f'reduction: {self.data.shape[0]} to {self.indices.size}'
+            )
+            plt.grid()
+            plt.axis('equal')
+            plt.show()
+        except AttributeError:
+            Warning('cannot plot: requires matplotlib (and pyqt5)')
