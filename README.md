@@ -40,12 +40,15 @@ dp = DoPeR(data=data_original)
 # either use epsilon threshold (i.e. max. error w.r.t. normalized data)
 data_simplified_eps = dp.simplify(epsilon=0.2)
 
-# or use maximum recursion depth
-data_simplified_depth = dp.simplify(max_depth=4)
-
 # compare original data and simplified data in a plot
 dp.plot()
+
+# or use maximum recursion depth
+data_simplified_depth = dp.simplify(max_depth=2)
+
 ```
+
+![Example line simplification plot.][3]
 
 Also see examples in [tests][2].
 
@@ -56,3 +59,4 @@ Cartographica: the international journal for geographic information and geovisua
 
 [1]: https://doi.org/10.3138/FM57-6770-U75U-7727
 [2]: https://github.com/dennisvang/dope/tree/main/tests
+[3]: https://github.com/dennisvang/dope/blob/main/pdf/dope-example.png
