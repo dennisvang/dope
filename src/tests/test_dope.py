@@ -1,6 +1,6 @@
 from unittest import TestCase
 import numpy
-from src.dope import normalize, point_to_line, DoPe
+from src.dope import normalize, points_to_line, DoPe
 
 
 class NormalizeTests(TestCase):
@@ -16,13 +16,10 @@ class PointToLineTests(TestCase):
     def test_point_to_line(self):
         actual_distance = 2
         line_segment_length = 3
-        point = numpy.array([actual_distance, 0])
         line = numpy.array([[0, 0], [0, line_segment_length]])
-        cases = [(False, actual_distance),
-                 (True, actual_distance * line_segment_length)]
-        for ignore, expected_length in cases:
-            with self.subTest(ignore=ignore):
-                self.assertEqual(
-                    expected_length,
-                    point_to_line(
-                        point=point, line=line, ignore_denominator=ignore))
+        point = numpy.array([actual_distance, 0])
+        cases = [point, numpy.vstack((point, point))]
+        for case in cases:
+            with self.subTest(case=case):
+                self.assertTrue(numpy.all(
+                    points_to_line(point=case, line=line) == actual_distance))
