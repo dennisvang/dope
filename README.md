@@ -38,8 +38,8 @@ data_original = [
 
 dp = DoPeR(data=data_original)
 
-# either use epsilon threshold (i.e. max. error w.r.t. normalized data)
-data_simplified_eps = dp.simplify(epsilon=0.2)
+# either use tolerance threshold (i.e. max. error w.r.t. normalized data)
+data_simplified_eps = dp.simplify(tolerance=0.2)
 
 # compare original data and simplified data in a plot
 dp.plot()

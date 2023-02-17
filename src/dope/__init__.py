@@ -55,7 +55,7 @@ class _DoPe(object):
     def __init__(self, data: numpy.typing.ArrayLike):
         self.data = numpy.array(data)
         self.data_normalized = normalize(self.data)
-        self.epsilon = None
+        self.tolerance = None
         self.max_depth = None
         self.indices = None
 
@@ -81,10 +81,10 @@ class _DoPe(object):
                 linestyle=':',
                 marker='o',
             )
-            # todo: plot epsilon line segment for reference
+            # todo: plot tolerance line segment for reference
             plt.title(
                 f'{"normalized" if normalized else "original"} units, '
-                f'epsilon={self.epsilon}, '
+                f'tolerance={self.tolerance}, '
                 f'max_depth={self.max_depth}, '
                 f'reduction: {data.shape[0]} to {self.indices.size}'
             )
@@ -105,16 +105,16 @@ class DoPeR(_DoPe):
 
     def simplify(
         self,
-        epsilon: Optional[float] = None,
+        tolerance: Optional[float] = None,
         max_depth: Optional[int] = None,
         interval: Optional[List[int]] = None,
         _depth: int = 0,
     ) -> numpy.ndarray:
         """Recursive (depth-first) Douglas-Peucker line simplification."""
         # handle input arguments
-        if epsilon is None:
-            epsilon = 0
-        self.epsilon = epsilon
+        if tolerance is None:
+            tolerance = 0
+        self.tolerance = tolerance
         if max_depth is None or max_depth >= RECURSION_LIMIT:
             max_depth = RECURSION_LIMIT
         self.max_depth = max_depth
@@ -130,9 +130,9 @@ class DoPeR(_DoPe):
         bottom_reached = not distances.size
         max_depth_reached = _depth == self.max_depth
         local_max_index = numpy.argmax(distances) if distances.size else None
-        epsilon_reached = distances[local_max_index] < self.epsilon
+        tolerance_reached = distances[local_max_index] < self.tolerance
         # return or split
-        if bottom_reached or max_depth_reached or epsilon_reached:
+        if bottom_reached or max_depth_reached or tolerance_reached:
             # base case
             pass
         else:
@@ -146,13 +146,13 @@ class DoPeR(_DoPe):
             # split and evaluate both sides recursively
             _depth += 1
             self.simplify(
-                epsilon=self.epsilon,
+                tolerance=self.tolerance,
                 max_depth=self.max_depth,
                 interval=[interval[0], global_max_index],
                 _depth=_depth,
             )
             self.simplify(
-                epsilon=self.epsilon,
+                tolerance=self.tolerance,
                 max_depth=self.max_depth,
                 interval=[global_max_index, interval[1]],
                 _depth=_depth,

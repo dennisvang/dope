@@ -40,7 +40,7 @@ class DoPeRTests(TestCase):
             [7, 0],
         ]
 
-    def test_simplify_epsilon(self):
+    def test_simplify_tolerance(self):
         dp = DoPeR(data=self.data)
         cases = [
             (0.0, 8),
@@ -53,9 +53,9 @@ class DoPeRTests(TestCase):
             (0.7, 2),
             (1.0, 2),
         ]
-        for epsilon, expected_length in cases:
-            with self.subTest(msg=epsilon):
-                simplified = dp.simplify(epsilon=epsilon)
+        for tolerance, expected_length in cases:
+            with self.subTest(msg=tolerance):
+                simplified = dp.simplify(tolerance=tolerance)
                 if SHOW_PLOTS:
                     dp.plot()
                 self.assertEqual(expected_length, simplified.shape[0])
