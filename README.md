@@ -14,21 +14,20 @@ Currently we only offer a recursive implementation (depth-first), which may not 
 
 Normal installation:
 
-```pip install dope```
+```pip install dopelines```
 
 With plot support (adds `matplotlib`):
 
-```pip install dope[plot]```
+```pip install dopelines[plot]```
 
 With development tools:
 
-```pip install dope[dev]```
+```pip install dopelines[dev]```
 
 ## Example
 
 ```python
 from dope import DoPeR
-import numpy
 
 data_original = [
     [0, 0], [1, -1], [2, 2], [3, 0], [4, 0], [5, -1], [6, 1], [7, 0]

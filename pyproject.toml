@@ -4,7 +4,7 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "dope"
+name = "dopelines"
 dynamic = ["version"]
 description = "Douglas-Peucker line simplification"
 readme = "README.md"
