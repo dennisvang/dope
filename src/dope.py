@@ -42,6 +42,11 @@ class DoPe(object):
         self.max_depth = max_depth
         self.indices = None
 
+    @property
+    def max_length(self):
+        """ max. number of nodes in the tree at given depth (plus two edges) """
+        return sum(2**i for i in range(self.max_depth)) + 2
+
     def simplify(self, interval=None, depth=0):
         """ recursive (depth-first) Douglas-Peucker line simplification """
         # init

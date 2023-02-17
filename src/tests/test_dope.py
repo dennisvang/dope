@@ -43,10 +43,8 @@ class DoPeTests(TestCase):
             [[0, 0], [1, -1], [2, 2], [3, 0], [4, 0], [5, -1], [6, 1], [7, 0]])
         cases = [0, 1, 2, 3, 4]  # the None case is covered in the epsilon test
         for max_depth in cases:
-            # max. number of nodes in the tree at given depth (plus two edges)
-            expected_max_length = sum(2**i for i in range(max_depth)) + 2
             with self.subTest(max_depth=max_depth):
                 dp = DoPe(data=data, epsilon=0, max_depth=max_depth)
                 dp.simplify()
                 dp.plot()
-                self.assertLessEqual(dp.indices.size, expected_max_length)
+                self.assertLessEqual(dp.indices.size, dp.max_length)
