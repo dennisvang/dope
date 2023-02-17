@@ -47,8 +47,8 @@ class DoPe(object):
             point=self.data[interval[0]:interval[1], :],
             line=self.data[interval][:])
         # check if largest distance meets requirement
-        max_index_local = numpy.argmax(distances)
-        if distances[max_index_local] < self.epsilon:
+        max_index_local = numpy.argmax(distances) if distances.size else None
+        if not max_index_local or distances[max_index_local] < self.epsilon:
             # base case
             return
         else:
@@ -61,9 +61,9 @@ class DoPe(object):
             self.simplify(interval=[max_index_global, interval[1]])
 
     def plot(self):
-        plt.plot(self.data[:, 0], self.data[:, 1], color='0.8')
+        plt.plot(self.data[:, 0], self.data[:, 1], color='0.7')
         plt.plot(self.data[self.indices, 0], self.data[self.indices, 1],
-                 color='r', linestyle='', marker='o')
+                 color='r', linestyle=':', marker='o')
         plt.title(f'normalized data, epsilon={self.epsilon}')
         plt.grid()
         plt.axis('equal')
