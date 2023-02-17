@@ -1,6 +1,8 @@
 from unittest import TestCase
 import numpy
-from dope import normalize, distance_point_to_line, DoPe
+from dope import normalize, distance_point_to_line, DoPeR
+
+SHOW_PLOTS = False
 
 
 class NormalizeTests(TestCase):
@@ -25,11 +27,21 @@ class DistancePointToLineTests(TestCase):
                 self.assertTrue(numpy.all(distances == actual_distance))
 
 
-class DoPeTests(TestCase):
+class DoPeRTests(TestCase):
+    def setUp(self) -> None:
+        self.data = [
+            [0, 0],
+            [1, -1],
+            [2, 2],
+            [3, 0],
+            [4, 0],
+            [5, -1],
+            [6, 1],
+            [7, 0],
+        ]
+
     def test_simplify_epsilon(self):
-        data = numpy.array(
-            [[0, 0], [1, -1], [2, 2], [3, 0], [4, 0], [5, -1], [6, 1], [7, 0]]
-        )
+        dp = DoPeR(data=self.data)
         cases = [
             (0.0, 8),
             (0.1, 8),
@@ -42,20 +54,18 @@ class DoPeTests(TestCase):
             (1.0, 2),
         ]
         for epsilon, expected_length in cases:
-            with self.subTest(epsilon=epsilon):
-                dp = DoPe(data=data, epsilon=epsilon, max_depth=None)
-                dp.simplify()
-                dp.plot()
-                self.assertEqual(expected_length, dp.indices.size)
+            with self.subTest(msg=epsilon):
+                simplified = dp.simplify(epsilon=epsilon)
+                if SHOW_PLOTS:
+                    dp.plot()
+                self.assertEqual(expected_length, simplified.shape[0])
 
     def test_simplify_max_depth(self):
-        data = numpy.array(
-            [[0, 0], [1, -1], [2, 2], [3, 0], [4, 0], [5, -1], [6, 1], [7, 0]]
-        )
-        cases = [0, 1, 2, 3, 4]  # the None case is covered in the epsilon test
+        dp = DoPeR(data=self.data)
+        cases = [0, 1, 2, 3, 4]
         for max_depth in cases:
-            with self.subTest(max_depth=max_depth):
-                dp = DoPe(data=data, epsilon=0, max_depth=max_depth)
-                dp.simplify()
-                dp.plot()
-                self.assertLessEqual(dp.indices.size, dp.max_length)
+            with self.subTest(msg=max_depth):
+                simplified = dp.simplify(max_depth=max_depth)
+                if SHOW_PLOTS:
+                    dp.plot(normalized=False)
+                self.assertLessEqual(simplified.shape[0], dp.max_length)
