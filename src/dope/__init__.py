@@ -15,13 +15,13 @@ RECURSION_LIMIT = sys.getrecursionlimit()
 
 
 def normalize(data: numpy.ndarray) -> numpy.ndarray:
-    """transform data columns so their values are between zero and one"""
+    """Transform data columns so their values are between zero and one."""
     return (data - data.min(axis=0, initial=None)) / data.ptp(axis=0)
 
 
 def distance_point_to_line(point, line):
     """
-    distance from one (or more) point(s) to a line defined by two nodes
+    Distance from one (or more) point(s) to a line defined by two nodes.
 
     point = [x0, y0]  (can also be an m x 2 array of points)
     line = [[x1, y1], [x2, y2]]
@@ -56,11 +56,11 @@ class DoPe(object):
 
     @property
     def max_length(self):
-        """max. number of nodes in the tree at given depth (plus two edges)"""
+        """Max. number of nodes in the tree at given depth (plus two edges)."""
         return sum(2**i for i in range(self.max_depth)) + 2
 
     def simplify(self, interval=None, depth=0):
-        """recursive (depth-first) Douglas-Peucker line simplification"""
+        """Recursive (depth-first) Douglas-Peucker line simplification."""
         # init
         if interval is None:
             interval = [0, self.data.shape[0] - 1]
@@ -97,6 +97,7 @@ class DoPe(object):
             )
 
     def plot(self):
+        """Plot the original line and simplified line on top of each other."""
         if plt:
             plt.plot(self.data[:, 0], self.data[:, 1], color='0.7')
             plt.plot(
