@@ -2,7 +2,27 @@
 
 **Do**uglas-**Pe**ucker line simplification (data reduction).
 
-Currently includes only a recursive implementation (depth-first). An iterative implementation may follow (breadth-first).
+Reduces the number of points in a dataset, while preserving its most striking features.
+
+The resulting dataset is a subset of the original dataset.
+
+Similar algorithms are used e.g. when zooming on a geographical map. However, this type of algoithm is also useful for general data reduction, as an alternative to conventional filtering.
+
+Currently we only offer a recursive implementation (depth-first), which may not be the most efficient. An iterative implementation may follow (breadth-first).
+
+## Installation
+
+Normal installation:
+
+```pip install dope```
+
+With plot support (adds `matplotlib`):
+
+```pip install dope[plot]```
+
+With development tools:
+
+```pip install dope[dev]```
 
 ## Example
 
