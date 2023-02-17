@@ -29,16 +29,18 @@ class DistancePointToLineTests(TestCase):
 
 class DoPeRTests(TestCase):
     def setUp(self) -> None:
-        self.data = [
-            [0, 0],
-            [1, -1],
-            [2, 2],
-            [3, 0],
-            [4, 0],
-            [5, -1],
-            [6, 1],
-            [7, 0],
-        ]
+        # dummy data
+        x = range(8)
+        y = [0, -1, 2, 0, 0, -1, 1, 0]
+        self.data = list(zip(x, y))
+
+    def test_max_length(self):
+        """may be obvious, may be not"""
+        dp = DoPeR(data=self.data)
+        cases = [(0, 2), (1, 3), (2, 5), (3, 9), (4, 17)]
+        for max_depth, expected_max_length in cases:
+            dp.max_depth = max_depth
+            self.assertEqual(expected_max_length, dp.max_length)
 
     def test_simplify_tolerance(self):
         dp = DoPeR(data=self.data)

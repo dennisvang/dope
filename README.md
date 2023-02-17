@@ -55,7 +55,7 @@ Also see examples in [tests][2].
 
 ## Limitations
 
-Currently we only offer a recursive implementation (depth-first), which limits the number of points in the resulting dataset (due to the recursion limit), and may not be the most efficient.
+Currently we only offer a recursive implementation (depth-first), which is intuitive, but may not be the most efficient solution.
 An iterative implementation is in the works (breadth-first).
 
 ## References:

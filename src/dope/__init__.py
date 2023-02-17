@@ -56,7 +56,7 @@ class _DoPe(object):
         self.data = numpy.array(data)
         self.data_normalized = normalize(self.data)
         self.tolerance = None
-        self.max_depth = None
+        self.max_depth = RECURSION_LIMIT
         self.indices = None
 
     @property
@@ -100,8 +100,11 @@ class DoPeR(_DoPe):
 
     @property
     def max_length(self) -> int:
-        """Max. number of nodes in the tree at given depth (plus two edges)."""
-        return sum(2**i for i in range(self.max_depth)) + 2
+        """
+        Max. number of nodes in the simplified result (occurs if every
+        recursion results in a split).
+        """
+        return 2**self.max_depth + 1
 
     def simplify(
         self,
