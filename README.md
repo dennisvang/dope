@@ -2,14 +2,14 @@
 
 [**Do**uglas-**Pe**ucker][1] line simplification (data reduction).
 
-Reduces the number of points in a dataset, while preserving its most striking features.
+Reduces the number of points in a two-dimensional dataset, while preserving its most striking features.
 
 The resulting dataset is a subset of the original dataset.
 
-Similar algorithms are used e.g. when zooming on a geographical map. 
-However, this type of algorithm is also useful for general data reduction, as an alternative to conventional filtering.
+This type of algorithm is typically used to simplify geographical data, e.g. when zooming a digital map (see e.g. [Django's GEOSGeometry.simplify()][4] based on [GEOS][5]). 
 
-Currently we only offer a recursive implementation (depth-first), which may not be the most efficient. An iterative implementation may follow (breadth-first).
+However, line simplification can be very useful for data reduction in general, as an alternative to conventional filtering.
+For example, it can be used to pre-process time-series data, making it more amenable to feature detection. 
 
 ## Installation
 
@@ -53,6 +53,11 @@ data_simplified_depth = dp.simplify(max_depth=2)
 
 Also see examples in [tests][2].
 
+## Limitations
+
+Currently we only offer a recursive implementation (depth-first), which limits the number of points in the resulting dataset (due to the recursion limit), and may not be the most efficient.
+An iterative implementation is in the works (breadth-first).
+
 ## References:
 
 [Douglas DH, Peucker TK. *Algorithms for the reduction of the number of points required to represent a digitized line or its caricature.*
@@ -61,3 +66,5 @@ Cartographica: the international journal for geographic information and geovisua
 [1]: https://doi.org/10.3138/FM57-6770-U75U-7727
 [2]: https://github.com/dennisvang/dope/tree/main/tests
 [3]: https://github.com/dennisvang/dope/blob/main/pdf/dope-example.png
+[4]: https://docs.djangoproject.com/en/stable/ref/contrib/gis/geos/#django.contrib.gis.geos.GEOSGeometry.simplify
+[5]: https://libgeos.org/doxygen/namespacegeos_1_1simplify.html
