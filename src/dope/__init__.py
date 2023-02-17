@@ -6,6 +6,11 @@ except ImportError:
     plt = None
 import numpy
 
+# single source of truth for package version
+# https://packaging.python.org/en/latest/guides/single-sourcing-package-version/
+# https://semver.org/
+__version__ = '0.0.1'
+
 RECURSION_LIMIT = sys.getrecursionlimit()
 
 
@@ -82,7 +87,7 @@ class DoPe(object):
             self.simplify(interval=[global_max_index, interval[1]], depth=depth)
 
     def plot(self):
-        try:
+        if plt:
             plt.plot(self.data[:, 0], self.data[:, 1], color='0.7')
             plt.plot(
                 self.data[self.indices, 0],
@@ -99,5 +104,5 @@ class DoPe(object):
             plt.grid()
             plt.axis('equal')
             plt.show()
-        except AttributeError:
-            Warning('cannot plot: requires matplotlib (and pyqt5)')
+        else:
+            Warning('matplotlib not found, try installing extras: dope[plot]')

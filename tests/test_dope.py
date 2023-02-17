@@ -1,6 +1,6 @@
 from unittest import TestCase
 import numpy
-from src.dope import normalize, distance_point_to_line, DoPe
+from dope import normalize, distance_point_to_line, DoPe
 
 
 class NormalizeTests(TestCase):
