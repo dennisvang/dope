@@ -24,6 +24,8 @@ With development tools:
 
 ```pip install dopelines[dev]```
 
+Note: The PyPi project is called `dopelines` instead of `dope`, because PyPi would not let us create a project named `dope`, even though the name appears to be available. 
+
 ## Example
 
 ```python
