@@ -1,12 +1,13 @@
 # DoPe
 
-**Do**uglas-**Pe**ucker line simplification (data reduction).
+[**Do**uglas-**Pe**ucker][1] line simplification (data reduction).
 
 Reduces the number of points in a dataset, while preserving its most striking features.
 
 The resulting dataset is a subset of the original dataset.
 
-Similar algorithms are used e.g. when zooming on a geographical map. However, this type of algoithm is also useful for general data reduction, as an alternative to conventional filtering.
+Similar algorithms are used e.g. when zooming on a geographical map. 
+However, this type of algorithm is also useful for general data reduction, as an alternative to conventional filtering.
 
 Currently we only offer a recursive implementation (depth-first), which may not be the most efficient. An iterative implementation may follow (breadth-first).
 
