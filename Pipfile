@@ -4,9 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-numpy = "*"
-matplotlib = "*"
-pyqt5 = "*"
+numpy = {version = "*", extras = ["matplotlib", "pyqt5"]}
 
 [dev-packages]
 
