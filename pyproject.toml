@@ -21,7 +21,7 @@ requires-python = ">=3.8"
 dependencies = ["numpy"]
 
 [project.optional-dependencies]
-dev = ["black"]
+dev = ["black", "build", "twine"]
 plot = ["matplotlib"]
 
 [project.urls]
