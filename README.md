@@ -7,7 +7,7 @@ Reduces the number of points in a two-dimensional dataset, while preserving its 
 The resulting dataset is a subset of the original dataset.
 
 Although line simplification is typically used for geographical data, e.g. when zooming a digital map (see e.g. [Django's GEOSGeometry.simplify()][4] based on [GEOS][5]),
-this type of algorithm can also be applied to general data reduction, as an alternative (or addition) to conventional filtering or subsampling. Some examples:
+this type of algorithm can also be applied to general data reduction problems, as an alternative (or addition) to conventional filtering or subsampling. Some examples:
 - creating miniature data plots
 - pre-processing time-series data for feature detection (e.g. peak detection) 
 

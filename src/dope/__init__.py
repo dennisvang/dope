@@ -11,7 +11,7 @@ import numpy.typing
 # single source of truth for package version
 # https://packaging.python.org/en/latest/guides/single-sourcing-package-version/
 # https://semver.org/
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 RECURSION_LIMIT = sys.getrecursionlimit()
 
